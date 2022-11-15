@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 	"log"
 	"os"
+	"strings"
 )
 
 var rootCmd = &cobra.Command{
@@ -37,6 +38,11 @@ func runCommand(cmd *cobra.Command, args []string) {
 		log.Fatal(err)
 	}
 
+	nginxLog := false
+	if strings.Contains(args[0], "nginx") {
+		nginxLog = true
+	}
+
 	content, err := readFile(args[0])
 	if err != nil {
 		log.Fatal(err)
@@ -50,7 +56,7 @@ func runCommand(cmd *cobra.Command, args []string) {
 		}
 		break
 	case "json":
-		err := content.WriteJsonFile(output)
+		err := content.WriteJsonFile(output, nginxLog)
 		if err != nil {
 			log.Fatal(err)
 		}
